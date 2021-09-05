@@ -55,6 +55,7 @@ def main():
                                          cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
                                          cv2.THRESH_BINARY,
                                          threshold_val)
+        binary_frame = binary_threshold(gray_frame, threshold_max)
         # remove noise from frame
         frame_denoised = denoise(adapt_frame, cv2.MORPH_ELLIPSE, noise_val)
         # get contour from frame
@@ -82,12 +83,15 @@ def main():
         cv2.imshow(window_name, frame_denoised)
         # show frame on recognize window
         cv2.imshow('Window2', frame)
+        # show binary frame
+        cv2.imshow('binary', binary_frame)
 
         # save obj contour on 'k' key press
         if cv2.waitKey(1) & 0xFF == ord('k'):
             if biggest_contour is not None:
                 saved_contours['Object ' + str(i)] = biggest_contour
                 i = i + 1
+                print("apretaste k")
         # exit loop on 'q' key press
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
@@ -114,6 +118,11 @@ def get_trackbar_value(trackbar_name, window_name):
 
 def adaptive_threshold(frame, slider_max, adaptative, binary, trackbar_value):
     return cv2.adaptiveThreshold(frame, slider_max, adaptative, binary, trackbar_value, 0)
+
+
+def binary_threshold(frame, slider_max):
+    ret1, thresh1 = cv2.threshold(frame, slider_max, 255, cv2.THRESH_BINARY)
+    return thresh1
 
 
 def denoise(frame, method, radius):
