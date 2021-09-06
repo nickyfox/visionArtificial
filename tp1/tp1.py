@@ -91,7 +91,6 @@ def main():
             if biggest_contour is not None:
                 saved_contours['Object ' + str(i)] = biggest_contour
                 i = i + 1
-                print("apretaste k")
         # exit loop on 'q' key press
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
