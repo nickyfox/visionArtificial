@@ -35,7 +35,7 @@ def train_model():
     load_training_set()
 
     tree = cv2.ml.DTrees_create() # porque DTrees
-    tree.setCVFolds()
+    tree.setCVFolds(1)
     tree.setMaxDepth(10) # esto hay que entender el porque le decimos q es 10
     tree.train(trainData, cv2.ml.ROW_SAMPLE, trainLabels)
     return tree
