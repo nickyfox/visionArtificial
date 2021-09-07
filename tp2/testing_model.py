@@ -21,8 +21,8 @@ def load_and_test(model):
         cv2.waitKey(0)
 
 
-def predict_contour(model, contour):
-    hu_moments = hu_moments_of_contour(contour)
-    sample = np.array([hu_moments], dtype=np.float32)
-    testResponse = model.predict(sample)[1]
-    return label_to_int(testResponse)
+# def predict_contour(model, contour):
+#     hu_moments = hu_moments_of_contour(contour)
+#     sample = np.array([hu_moments], dtype=np.float32)
+#     testResponse = model.predict(sample)[1]
+#     return label_to_int(testResponse)
