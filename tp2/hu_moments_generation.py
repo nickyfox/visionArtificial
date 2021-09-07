@@ -22,9 +22,9 @@ def generate_hu_moments_file():
         writer = csv.writer(file)
         # Ahora escribo los momentos de Hu de cada uno de las figuras. Con el string "rectangle...etc" busca en la carpeta donde estan cada una de las imagenes
         # generar los momentos de Hu y los escribe sobre este archivo. (LOS DE ENTRENAMIENTO).
-        write_hu_moments("circulo", writer)
-        write_hu_moments("estrella", writer)
-        write_hu_moments("rayo", writer)
+        write_hu_moments("1", writer) # ciruclo
+        write_hu_moments("2", writer) # estrella
+        write_hu_moments("3", writer) # rayo
 
 
 

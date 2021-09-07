@@ -7,7 +7,7 @@ from tp2.label_converters import label_to_int, int_to_label
 
 def predict_model(model):
     # define main window name
-    window_name = 'Window1'
+    window_name = 'Window2'
     # define threshold_trackbar name
     threshold_trackbar = 'Threshold'
     # define similarity_trackbar name
@@ -26,12 +26,10 @@ def predict_model(model):
     cap = cv2.VideoCapture(0)
     # define main contour (starts null)
     biggest_contour = None
-    # define red color
-    color_red = (0, 0, 255)
     # define green color
     color_green = (0, 255, 0)
     # create threshold trackbar
-    create_trackbar(threshold_trackbar, window_name, threshold_max)
+    create_trackbar(threshold_trackbar, window_name, threshold_max, 50)
     # create similarity trackbar
     create_trackbar(similarity_trackbar, window_name, similarity_max)
     # create noise trackbar
@@ -46,8 +44,6 @@ def predict_model(model):
         gray_frame = apply_color_convertion(frame, cv2.COLOR_RGB2GRAY)
         # get threshold value form trackbar
         threshold_val = int(get_trackbar_value(threshold_trackbar, window_name) / 2) * 2 + 3
-        # get similarity value form trackbar (- similar, + different)
-        similarity_val = get_trackbar_value(similarity_trackbar, window_name) / 100
         # get noise value form trackbar
         noise_val = get_trackbar_value(noise_trackbar, window_name)
         # apply threshold to grayscale frame (converts to black and white, helps recognizing contours)
@@ -66,16 +62,16 @@ def predict_model(model):
             # draw matched contour on frame
             draw_contours(frame, biggest_contour, color_green, noise_val)
             # get recognized obj name
-            obj = predict(model, frame)
+            obj = predict(model, biggest_contour)
             # draw obj name text on frame
             cv2.putText(frame, obj, (100, 100), cv2.FONT_HERSHEY_PLAIN, 3, color_green, 2, cv2.LINE_AA)
 
         # show frame on main window
-        # cv2.imshow(window_name, frame_denoised)
+        cv2.imshow(window_name, frame_denoised)
         # show frame on recognize window
         cv2.imshow('Window2', frame)
-        # # show binary frame
-        # cv2.imshow('binary', binary_frame)
+        # show binary frame
+        cv2.imshow('binary', binary_frame)
 
         # exit loop on 'q' key press
         if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -93,7 +89,7 @@ def on_trackbar(val):
     pass
 
 
-def create_trackbar(trackbar_name, window_name, slider_max, starting_val=0):
+def create_trackbar(trackbar_name, window_name, slider_max, starting_val=20):
     cv2.createTrackbar(trackbar_name, window_name, starting_val, slider_max, on_trackbar)
 
 
@@ -130,15 +126,8 @@ def get_biggest_contour(contours):
     return max_cnt
 
 
-# def compare_contours(contour_to_compare, saved_contours, max_diff):
-#     for contour in saved_contours:
-#         if cv2.matchShapes(contour_to_compare, contour, cv2.CONTOURS_MATCH_I2, 0) < max_diff:
-#             return True
-#     return False
-
-
-def predict(model, f):
-    hu_moments = hu_moments_of_frame(f)  # Genera los momentos de hu de los files de testing
+def predict(model, contour):
+    hu_moments = hu_moments_of_contour(contour)  # Genera los momentos de hu de los files de testing
     sample = np.array([hu_moments], dtype=np.float32)  # numpy
     testResponse = model.predict(sample)[1]  # Predice la clase de cada file
     return int_to_label(testResponse)
