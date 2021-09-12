@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 from tp2.hu_moments_generation import hu_moments_of_contour, hu_moments_of_file, hu_moments_of_frame
-from tp2.label_converters import label_to_int, int_to_label
+from tp2.label_converters import get_label
 
 
 def predict_model(model):
@@ -130,7 +130,7 @@ def predict(model, contour):
     hu_moments = hu_moments_of_contour(contour)  # Genera los momentos de hu de los files de testing
     sample = np.array([hu_moments], dtype=np.float32)  # numpy
     testResponse = model.predict(sample)[1]  # Predice la clase de cada file
-    return int_to_label(testResponse)
+    return get_label(int(testResponse[0][0]))
 
 
 def draw_contours(frame, contours, color, thickness):

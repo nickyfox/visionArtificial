@@ -3,7 +3,7 @@ import csv
 
 import numpy as np
 
-from label_converters import label_to_int
+from tp2.label_converters import get_number_for_label
 
 trainData = []
 trainLabels = []
@@ -16,12 +16,13 @@ def load_training_set():
     with open('util/csv/descriptores.csv') as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         for row in csv_reader:
-            class_label = row.pop(0)  # saca el primero elemento de la lista
+            label = row.pop(0)  # saca el primero elemento de la lista
+            class_label = get_number_for_label(label)
             floats = []
             for n in row:
                 floats.append(float(n))  # tiene los momentos de Hu transformados a float.
             trainData.append(np.array(floats, dtype=np.float32))  # momentos de Hu
-            trainLabels.append(np.array([label_to_int(class_label)], dtype=np.int32))  # Resultados
+            trainLabels.append(np.array([class_label], dtype=np.int32))  # Resultados
             # Valores y resultados se necesitan por separados
     trainData = np.array(trainData, dtype=np.float32)
     trainLabels = np.array(trainLabels, dtype=np.int32)
