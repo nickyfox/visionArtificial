@@ -28,15 +28,12 @@ def load_training_set():
     trainLabels = np.array(trainLabels, dtype=np.int32)
 
 
-# transforma los arrays a arrays de forma numpy
-
-
 # llama la funcion de arriba, se manda a entrenar y devuelve el modelo entrenado
 def train_model():
     load_training_set()
 
-    tree = cv2.ml.DTrees_create() # porque DTrees
+    tree = cv2.ml.DTrees_create()
     tree.setCVFolds(1)
-    tree.setMaxDepth(10) # esto hay que entender el porque le decimos q es 10
+    tree.setMaxDepth(10)
     tree.train(trainData, cv2.ml.ROW_SAMPLE, trainLabels)
     return tree

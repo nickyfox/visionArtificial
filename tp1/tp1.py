@@ -27,9 +27,9 @@ def main():
     # define green color
     color_green = (0, 255, 0)
     # create threshold trackbar
-    create_trackbar(threshold_trackbar, window_name, threshold_max)
+    create_trackbar(threshold_trackbar, window_name, threshold_max, 30)
     # create similarity trackbar
-    create_trackbar(similarity_trackbar, window_name, similarity_max)
+    create_trackbar(similarity_trackbar, window_name, similarity_max, 30)
     # create noise trackbar
     create_trackbar(noise_trackbar, window_name, noise_max, 10)
     # define contours map
