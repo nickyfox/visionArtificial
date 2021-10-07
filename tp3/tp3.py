@@ -27,7 +27,7 @@ def grab_cut(img):
     bgd_model = np.zeros((1, 65), np.float64)
     fgd_model = np.zeros((1, 65), np.float64)
     # usamos roi para agarrar el rect
-    rect = cv2.selectROI("img", img, fromCenter=False, showCrosshair=True)
+    rect = cv2.selectROI("grab_cut", img, fromCenter=False, showCrosshair=True)
     print(mask)
 
     cv2.grabCut(img, mask, rect, bgd_model, fgd_model, 10, cv2.GC_INIT_WITH_RECT)
@@ -40,8 +40,13 @@ def grab_cut(img):
     # ?????????????
     img = img*mask2[:, :, np.newaxis]
 
-    cv2.imshow("img", img)
+    cv2.imshow("roi", img)
+
     cv2.waitKey()
+
+
+def watershed(img):
+    cv2.imshow("img", img)
 
 
 main()
