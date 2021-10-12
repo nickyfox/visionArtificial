@@ -28,25 +28,49 @@ def grab_cut(img):
     fgd_model = np.zeros((1, 65), np.float64)
     # usamos roi para agarrar el rect
     rect = cv2.selectROI("grab_cut", img, fromCenter=False, showCrosshair=True)
-    print(mask)
 
     cv2.grabCut(img, mask, rect, bgd_model, fgd_model, 10, cv2.GC_INIT_WITH_RECT)
-    print(mask)
     # ????????????
     mask2 = np.where((mask == 2) | (mask == 0), 0, 1).astype('uint8')
-
-    print(mask2)
 
     # ?????????????
     img = img*mask2[:, :, np.newaxis]
 
-    cv2.imshow("roi", img)
+    watershed(img)
 
     cv2.waitKey()
 
 
 def watershed(img):
-    cv2.imshow("img", img)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+    # noise removal
+    kernel = np.ones((3, 3), np.uint8)
+    opening = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, kernel, iterations=2)
+    closing = cv2.morphologyEx(opening, cv2.MORPH_CLOSE, kernel, iterations=2)
+
+    sure_fg = cv2.erode(closing, kernel, iterations=3)
+    # Finding unknown region
+    sure_fg = np.uint8(sure_fg)
+    # Marker labelling
+    _, markers = cv2.connectedComponents(sure_fg)
+
+    def onclick(event, x, y, flags, param):
+        global ix, iy
+        if event == 4:
+            ix, iy = x, y
+            print('ix ', ix)
+            print("iy ", iy)
+            color = np.float64([1, 0, 1])  # red color
+            markers[ix][iy] = 1
+            cv2.circle(img, (x, y), 7, color, -1)
+            return
+
+    while True:
+        cv2.imshow("img", img)
+        cv2.setMouseCallback("img", onclick)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
 
 
 main()
