@@ -42,6 +42,7 @@ def grab_cut(img):
 
 
 def watershed(img):
+    global key
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
     # noise removal
@@ -57,20 +58,42 @@ def watershed(img):
 
     def onclick(event, x, y, flags, param):
         global ix, iy
-        if event == 4:
+        if event == 4:  # cuando levantas del click
             ix, iy = x, y
-            print('ix ', ix)
-            print("iy ", iy)
-            color = np.float64([1, 0, 1])  # red color
+            color = get_color(key)
             markers[ix][iy] = 1
             cv2.circle(img, (x, y), 7, color, -1)
             return
 
     while True:
         cv2.imshow("img", img)
+        key = cv2.waitKey(1)
         cv2.setMouseCallback("img", onclick)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
+
+
+def get_color(num):
+    print("este es el numero", num)
+    if num & 0xFF == ord('1'):
+        return (255, 0, 0)
+    if num == 2:
+        return (0, 255, 0)
+    if num == 3:
+        return (0, 0, 255)
+    if num == 4:
+        return (125, 0, 0)
+    if num == 5:
+        return (0, 125, 0)
+    if num == 6:
+        return  (0, 0, 125)
+    if num == 7:
+        return (125, 125, 0)
+    if num == 8:
+        return (125, 0, 125)
+    if num == 9:
+        return (125, 125, 125)
+    return 0
 
 
 main()
