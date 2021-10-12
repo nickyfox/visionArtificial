@@ -52,47 +52,51 @@ def watershed(img):
 
     sure_fg = cv2.erode(closing, kernel, iterations=3)
     # Finding unknown region
-    sure_fg = np.uint8(sure_fg)
+    markers = np.uint8(sure_fg)
     # Marker labelling
-    _, markers = cv2.connectedComponents(sure_fg)
+    # _, markers = cv2.connectedComponents(sure_fg)
 
     def onclick(event, x, y, flags, param):
         global ix, iy
         if event == 4:  # cuando levantas del click
             ix, iy = x, y
-            color = get_color(key)
-            markers[ix][iy] = 1
+            color, current_num = get_color(key)
+            markers[ix][iy] = current_num
             cv2.circle(img, (x, y), 7, color, -1)
             return
 
     while True:
         cv2.imshow("img", img)
-        key = cv2.waitKey(1)
+        key = cv2.waitKey(0)
         cv2.setMouseCallback("img", onclick)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
+        if key == 32:  # si apreto espacio
+            marker_img = img
+            marker_img[markers != 255] = [255, 0, 0]
+            cv2.imshow("markers", marker_img)
+        if key & 0xFF == ord('q'):
             break
 
 
 def get_color(num):
     print("este es el numero", num)
     if num & 0xFF == ord('1'):
-        return (255, 0, 0)
-    if num == 2:
-        return (0, 255, 0)
-    if num == 3:
-        return (0, 0, 255)
-    if num == 4:
-        return (125, 0, 0)
-    if num == 5:
-        return (0, 125, 0)
-    if num == 6:
-        return  (0, 0, 125)
-    if num == 7:
-        return (125, 125, 0)
-    if num == 8:
-        return (125, 0, 125)
-    if num == 9:
-        return (125, 125, 125)
+        return [255, 0, 0], 1
+    if num & 0xFF == ord('2'):
+        return [0, 255, 0], 2
+    if num & 0xFF == ord('3'):
+        return [0, 0, 255], 3
+    if num & 0xFF == ord('4'):
+        return [100, 50, 0], 4
+    if num & 0xFF == ord('5'):
+        return [0, 125, 0], 5
+    if num & 0xFF == ord('6'):
+        return [0, 0, 125], 6
+    if num & 0xFF == ord('7'):
+        return [125, 125, 0], 7
+    if num & 0xFF == ord('8'):
+        return [125, 0, 125], 8
+    if num & 0xFF == ord('9'):
+        return [125, 125, 125], 9
     return 0
 
 
