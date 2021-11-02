@@ -1,14 +1,12 @@
 import cv2
 import numpy as np
-from PIL import ImageColor
 
-base_colours = ['#0000FF', '#FFFF00', '#00FF00', '#00FFFF', '#8C0B90', '#C0E4FF', '#27B502', '#7C60A8', '#CF95D7',
-                '#FF6666']
+
 frame_window = 'Frame-Window'
 seeds_map_window = 'Seeds-Map-Window'
 watershed_result_window = 'Watershed-Result-Window'
-our_colors=[(255, 0, 0), (0, 255, 0),  (0, 0, 255), (100, 50, 0), (0, 125, 0), (0, 0, 125), (125, 125, 0),
-            (125, 0, 125), (125, 125, 125)]
+our_colors = [(255, 0, 0), (0, 255, 0),  (0, 0, 255), (100, 50, 0), (0, 125, 0), (0, 0, 125), (125, 125, 0),
+              (125, 0, 125), (125, 125, 125)]
 
 
 def onclick(event, x, y, flags, param):
@@ -45,7 +43,7 @@ def do_watershed(img):
 
     img[markers == -1] = [0, 0, 255]
     for n in range(1, 10):
-        img[markers == n] = ImageColor.getcolor(base_colours[n], "RGB")
+        img[markers == n] = our_colors[n-1]
 
     cv2.imshow(watershed_result_window, img)
     cv2.waitKey()
@@ -73,8 +71,7 @@ def main():
         seeds_copy = seeds.copy()
 
         for point in points:
-            color = ImageColor.getcolor(base_colours[point[1]], "RGB")
-            val = point[1]  # point[1] es el numero que elegi para esa coordenada
+            color = our_colors[point[1]]  # el point en uno es el valor del numero que le puse
             coordenadas = point[0]  # en la posicion 0 de la tupla point hay una tupla de coordenadas
 
             x = coordenadas[0]

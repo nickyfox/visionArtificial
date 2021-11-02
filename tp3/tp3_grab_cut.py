@@ -1,12 +1,6 @@
 import cv2
 import numpy as np
-from PIL import ImageColor
 
-base_colours = ['#0000FF', '#FFFF00', '#00FF00', '#00FFFF', '#8C0B90', '#C0E4FF', '#27B502', '#7C60A8', '#CF95D7',
-                '#FF6666']
-
-our_colors=[(255, 0, 0), (0, 255, 0),  (0, 0, 255), (100, 50, 0), (0, 125, 0), (0, 0, 125), (125, 125, 0),
-            (125, 0, 125), (125, 125, 125)]
 
 def main():
     # webcam init
