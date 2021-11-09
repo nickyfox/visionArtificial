@@ -3,7 +3,6 @@ import numpy as np
 
 
 frame_window = 'Frame-Window'
-seeds_map_window = 'Seeds-Map-Window'
 watershed_result_window = 'Watershed-Result-Window'
 our_colors = [(255, 0, 0), (0, 255, 0),  (0, 0, 255), (100, 50, 0), (0, 125, 0), (0, 0, 125), (125, 125, 0),
               (125, 0, 125), (125, 125, 125)]
@@ -60,7 +59,6 @@ def main():
 
     seeds = np.zeros((720, 1280), np.uint8)
     cv2.namedWindow(frame_window)
-    cv2.namedWindow(seeds_map_window)
 
     cap = cv2.VideoCapture(0)
     cv2.setMouseCallback(frame_window, onclick)
@@ -81,8 +79,6 @@ def main():
             cv2.circle(seeds_copy, (x, y), 7, color, -1)
 
         cv2.imshow(frame_window, frame_copy)
-        map = cv2.applyColorMap(seeds_copy, cv2.COLORMAP_COOL)
-        cv2.imshow(seeds_map_window, map)
 
         key = cv2.waitKey(100) & 0xFF
         if key == 32:  # si apreto space
